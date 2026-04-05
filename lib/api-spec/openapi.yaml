@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: app
+    description: App download page operations
+  - name: ratings
+    description: User ratings operations
 paths:
   /healthz:
     get:
@@ -24,6 +28,92 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /app/info:
+    get:
+      operationId: getAppInfo
+      tags: [app]
+      summary: Get app information
+      description: Returns all app metadata, stats, and download info
+      responses:
+        "200":
+          description: App info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppInfo"
+
+  /app/download:
+    post:
+      operationId: recordDownload
+      tags: [app]
+      summary: Record a download event
+      description: Increments the download count and returns the download URL
+      responses:
+        "200":
+          description: Download URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DownloadResponse"
+
+  /ratings:
+    get:
+      operationId: getRatings
+      tags: [ratings]
+      summary: Get all ratings
+      description: Returns paginated list of user reviews and rating breakdown
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Ratings list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RatingsResponse"
+    post:
+      operationId: submitRating
+      tags: [ratings]
+      summary: Submit a rating and review
+      description: Submits a user rating and optional review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitRatingBody"
+      responses:
+        "201":
+          description: Rating submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rating"
+
+  /ratings/summary:
+    get:
+      operationId: getRatingsSummary
+      tags: [ratings]
+      summary: Get ratings summary
+      description: Returns average rating and breakdown by star count
+      responses:
+        "200":
+          description: Summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RatingsSummary"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +124,170 @@ components:
       required:
         - status
 
+    AppInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        developer:
+          type: string
+        description:
+          type: string
+        shortDescription:
+          type: string
+        version:
+          type: string
+        fileSize:
+          type: string
+        packageName:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        downloadCount:
+          type: integer
+        minAndroidVersion:
+          type: string
+        targetAndroidVersion:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+        whatsNew:
+          type: string
+        contentRating:
+          type: string
+        updatedAt:
+          type: string
+        releasedAt:
+          type: string
+        downloadUrl:
+          type: string
+        iconUrl:
+          type: string
+        averageRating:
+          type: number
+        totalRatings:
+          type: integer
+      required:
+        - id
+        - name
+        - developer
+        - description
+        - shortDescription
+        - version
+        - fileSize
+        - packageName
+        - category
+        - tags
+        - downloadCount
+        - minAndroidVersion
+        - targetAndroidVersion
+        - permissions
+        - whatsNew
+        - contentRating
+        - updatedAt
+        - releasedAt
+        - downloadUrl
+        - iconUrl
+        - averageRating
+        - totalRatings
+
+    DownloadResponse:
+      type: object
+      properties:
+        downloadUrl:
+          type: string
+        downloadCount:
+          type: integer
+      required:
+        - downloadUrl
+        - downloadCount
+
+    Rating:
+      type: object
+      properties:
+        id:
+          type: integer
+        userName:
+          type: string
+        stars:
+          type: integer
+        reviewText:
+          type: string
+        createdAt:
+          type: string
+        helpful:
+          type: integer
+      required:
+        - id
+        - userName
+        - stars
+        - reviewText
+        - createdAt
+        - helpful
+
+    SubmitRatingBody:
+      type: object
+      properties:
+        userName:
+          type: string
+        stars:
+          type: integer
+        reviewText:
+          type: string
+      required:
+        - userName
+        - stars
+        - reviewText
+
+    RatingsResponse:
+      type: object
+      properties:
+        ratings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Rating"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+      required:
+        - ratings
+        - total
+        - page
+        - limit
+
+    RatingsSummary:
+      type: object
+      properties:
+        averageRating:
+          type: number
+        totalRatings:
+          type: integer
+        breakdown:
+          type: object
+          properties:
+            "5":
+              type: integer
+            "4":
+              type: integer
+            "3":
+              type: integer
+            "2":
+              type: integer
+            "1":
+              type: integer
+          required: ["5", "4", "3", "2", "1"]
+      required:
+        - averageRating
+        - totalRatings
+        - breakdown

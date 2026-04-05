@@ -8,3 +8,74 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface AppInfo {
+  id: number;
+  name: string;
+  developer: string;
+  description: string;
+  shortDescription: string;
+  version: string;
+  fileSize: string;
+  packageName: string;
+  category: string;
+  tags: string[];
+  downloadCount: number;
+  minAndroidVersion: string;
+  targetAndroidVersion: string;
+  permissions: string[];
+  whatsNew: string;
+  contentRating: string;
+  updatedAt: string;
+  releasedAt: string;
+  downloadUrl: string;
+  iconUrl: string;
+  averageRating: number;
+  totalRatings: number;
+}
+
+export interface DownloadResponse {
+  downloadUrl: string;
+  downloadCount: number;
+}
+
+export interface Rating {
+  id: number;
+  userName: string;
+  stars: number;
+  reviewText: string;
+  createdAt: string;
+  helpful: number;
+}
+
+export interface SubmitRatingBody {
+  userName: string;
+  stars: number;
+  reviewText: string;
+}
+
+export interface RatingsResponse {
+  ratings: Rating[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export type RatingsSummaryBreakdown = {
+  "1": number;
+  "2": number;
+  "3": number;
+  "4": number;
+  "5": number;
+};
+
+export interface RatingsSummary {
+  averageRating: number;
+  totalRatings: number;
+  breakdown: RatingsSummaryBreakdown;
+}
+
+export type GetRatingsParams = {
+  page?: number;
+  limit?: number;
+};

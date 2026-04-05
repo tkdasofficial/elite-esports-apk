@@ -14,3 +14,95 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Returns all app metadata, stats, and download info
+ * @summary Get app information
+ */
+export const GetAppInfoResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  developer: zod.string(),
+  description: zod.string(),
+  shortDescription: zod.string(),
+  version: zod.string(),
+  fileSize: zod.string(),
+  packageName: zod.string(),
+  category: zod.string(),
+  tags: zod.array(zod.string()),
+  downloadCount: zod.number(),
+  minAndroidVersion: zod.string(),
+  targetAndroidVersion: zod.string(),
+  permissions: zod.array(zod.string()),
+  whatsNew: zod.string(),
+  contentRating: zod.string(),
+  updatedAt: zod.string(),
+  releasedAt: zod.string(),
+  downloadUrl: zod.string(),
+  iconUrl: zod.string(),
+  averageRating: zod.number(),
+  totalRatings: zod.number(),
+});
+
+/**
+ * Increments the download count and returns the download URL
+ * @summary Record a download event
+ */
+export const RecordDownloadResponse = zod.object({
+  downloadUrl: zod.string(),
+  downloadCount: zod.number(),
+});
+
+/**
+ * Returns paginated list of user reviews and rating breakdown
+ * @summary Get all ratings
+ */
+export const getRatingsQueryPageDefault = 1;
+export const getRatingsQueryLimitDefault = 10;
+
+export const GetRatingsQueryParams = zod.object({
+  page: zod.coerce.number().default(getRatingsQueryPageDefault),
+  limit: zod.coerce.number().default(getRatingsQueryLimitDefault),
+});
+
+export const GetRatingsResponse = zod.object({
+  ratings: zod.array(
+    zod.object({
+      id: zod.number(),
+      userName: zod.string(),
+      stars: zod.number(),
+      reviewText: zod.string(),
+      createdAt: zod.string(),
+      helpful: zod.number(),
+    }),
+  ),
+  total: zod.number(),
+  page: zod.number(),
+  limit: zod.number(),
+});
+
+/**
+ * Submits a user rating and optional review
+ * @summary Submit a rating and review
+ */
+export const SubmitRatingBody = zod.object({
+  userName: zod.string(),
+  stars: zod.number(),
+  reviewText: zod.string(),
+});
+
+/**
+ * Returns average rating and breakdown by star count
+ * @summary Get ratings summary
+ */
+export const GetRatingsSummaryResponse = zod.object({
+  averageRating: zod.number(),
+  totalRatings: zod.number(),
+  breakdown: zod.object({
+    "1": zod.number(),
+    "2": zod.number(),
+    "3": zod.number(),
+    "4": zod.number(),
+    "5": zod.number(),
+  }),
+});

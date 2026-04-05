@@ -6,4 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./appInfo";
+export * from "./downloadResponse";
+export * from "./getRatingsParams";
 export * from "./healthStatus";
+export * from "./rating";
+export * from "./ratingsResponse";
+export * from "./ratingsSummary";
+export * from "./ratingsSummaryBreakdown";
+export * from "./submitRatingBody";

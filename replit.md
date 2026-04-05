@@ -15,6 +15,31 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
+- **Frontend**: React + Vite (artifacts/apk-download)
+
+## Artifacts
+
+### APK Download Page (`artifacts/apk-download`)
+- Single-page professional APK download landing page styled like Google Play Store
+- Primary color: orange-red
+- Light/dark system theme via `next-themes`
+- Preview path: `/` (root)
+
+### API Server (`artifacts/api-server`)
+- Express 5 backend serving `/api` routes
+- Routes: `/api/app/info`, `/api/app/download`, `/api/ratings`, `/api/ratings/summary`
+
+## Database Schema
+
+### `app_info` table
+Stores app metadata: name, developer, description, version, file size, package name, category, tags, download count, permissions, whats new, content rating, download URL, icon URL, release dates.
+
+### `ratings` table
+Stores user reviews: user name, stars (1-5), review text, helpful count, created at.
+
+## APK Download
+The APK download URL points to Google Drive direct download:
+`https://drive.google.com/uc?export=download&id=1m_h9zmeHkzFacPRQk5P85vJhKimsVuMp`
 
 ## Key Commands
 

@@ -14,8 +14,8 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **Database**: PostgreSQL + Drizzle ORM
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
 - **API codegen**: Orval (from OpenAPI spec)
-- **Build**: esbuild (CJS bundle)
-- **Frontend**: React + Vite (`artifacts/apk-download`)
+- **Build**: webpack 5 + Babel (frontend), esbuild (API server)
+- **Frontend**: Pure React + webpack (`artifacts/apk-download`)
 
 ## Artifacts
 
@@ -25,6 +25,7 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - Light/dark system theme via `next-themes`
 - Preview path: `/` (root)
 - Dev port: 20984
+- Bundler: webpack 5 + Babel + PostCSS (no Vite)
 
 ### API Server (`artifacts/api-server`)
 - Express 5 backend serving `/api` routes
@@ -33,9 +34,18 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 ## Workflows
 
-- **Start application** — runs the React + Vite frontend (`PORT=20984`)
+- **Start application** — runs the React webpack dev server (`PORT=20984`)
 - **API Server** — runs the Express API server (`PORT=8080`)
 - Both are started together via the **Project** workflow (run button)
+
+## Vercel Deployment
+
+Configured via `vercel.json`:
+- **Build command**: `pnpm --filter @workspace/apk-download run build`
+- **Output directory**: `artifacts/apk-download/dist/public`
+- **Install command**: `pnpm install`
+- **Framework**: `null` (pure webpack, no framework detection)
+- **Rewrites**: All routes fall back to `/index.html` for SPA routing
 
 ## Database Schema
 
@@ -55,7 +65,7 @@ The APK download URL points to Google Drive direct download:
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- `pnpm --filter @workspace/apk-download run build` — build the React frontend
+- `pnpm --filter @workspace/apk-download run build` — webpack production build
 - `pnpm --filter @workspace/api-server run build` — build the API server
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.

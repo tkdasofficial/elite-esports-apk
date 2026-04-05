@@ -2,7 +2,7 @@
   "buildCommand": "pnpm --filter @workspace/apk-download run build",
   "outputDirectory": "artifacts/apk-download/dist/public",
   "installCommand": "pnpm install",
-  "framework": null,
+  "framework": "create-react-app",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]

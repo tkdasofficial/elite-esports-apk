@@ -1,7 +1,7 @@
 {
-  "buildCommand": "pnpm --filter @workspace/apk-download run build",
+  "buildCommand": "cd artifacts/apk-download && npm run build",
   "outputDirectory": "artifacts/apk-download/dist/public",
-  "installCommand": "pnpm install",
+  "installCommand": "cd artifacts/apk-download && npm install",
   "framework": "create-react-app",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }

@@ -39,7 +39,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "PORT=20984 pnpm --filter @workspace/apk-download run dev"
+args = "cd artifacts/apk-download && PORT=20984 npm run dev"
 waitForPort = 20984
 
 [[workflows.workflow]]

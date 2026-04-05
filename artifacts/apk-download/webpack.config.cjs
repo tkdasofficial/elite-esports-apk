@@ -17,6 +17,7 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx"],
+      symlinks: false,
       alias: {
         "@": path.resolve(__dirname, "src"),
         "@assets": path.resolve(__dirname, "../../attached_assets"),
@@ -26,7 +27,7 @@ module.exports = (env, argv) => {
       rules: [
         {
           test: /\.(ts|tsx|js|jsx)$/,
-          exclude: /node_modules/,
+          exclude: /node_modules\/(?!@workspace)/,
           use: {
             loader: "babel-loader",
             options: {

@@ -1,5 +1,4 @@
-import { pgTable, serial, text, integer, real, timestamp, json } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
+import { pgTable, serial, text, integer, timestamp, json } from "drizzle-orm/pg-core";
 import { z } from "zod/v4";
 
 export const appInfoTable = pgTable("app_info", {
@@ -34,10 +33,36 @@ export const ratingsTable = pgTable("ratings", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const insertAppInfoSchema = createInsertSchema(appInfoTable).omit({ id: true });
+export const insertAppInfoSchema = z.object({
+  name: z.string(),
+  developer: z.string(),
+  description: z.string(),
+  shortDescription: z.string(),
+  version: z.string(),
+  fileSize: z.string(),
+  packageName: z.string(),
+  category: z.string(),
+  tags: z.array(z.string()).default([]),
+  downloadCount: z.number().int().default(0),
+  minAndroidVersion: z.string(),
+  targetAndroidVersion: z.string(),
+  permissions: z.array(z.string()).default([]),
+  whatsNew: z.string(),
+  contentRating: z.string(),
+  downloadUrl: z.string(),
+  iconUrl: z.string(),
+  releasedAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+});
+
 export type InsertAppInfo = z.infer<typeof insertAppInfoSchema>;
 export type AppInfo = typeof appInfoTable.$inferSelect;
 
-export const insertRatingSchema = createInsertSchema(ratingsTable).omit({ id: true, helpful: true, createdAt: true });
+export const insertRatingSchema = z.object({
+  userName: z.string(),
+  stars: z.number().int().min(1).max(5),
+  reviewText: z.string().default(""),
+});
+
 export type InsertRating = z.infer<typeof insertRatingSchema>;
 export type Rating = typeof ratingsTable.$inferSelect;

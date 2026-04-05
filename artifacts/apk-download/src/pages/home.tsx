@@ -616,9 +616,6 @@ export default function Home() {
           <p className="text-xs text-muted-foreground font-medium">
             © {new Date().getFullYear()} Elite eSports. All rights reserved.
           </p>
-          <p className="text-[11px] text-muted-foreground/60">
-            Android and Google Play are trademarks of Google LLC.
-          </p>
         </footer>
 
       </div>
